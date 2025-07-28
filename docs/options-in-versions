@@ -117,7 +117,6 @@
 --list-only (-l)                     4.0
 --local-port                         7.15.2
 --location (-L)                      4.9
---location-mode                      8.14.0
 --location-trusted                   7.10.4
 --login-options                      7.34.0
 --mail-auth                          7.25.0
@@ -200,6 +199,7 @@
 --range (-r)                         4.0
 --rate                               7.84.0
 --raw                                7.16.2
+--redirect                           8.16.0
 --referer (-e)                       4.0
 --remote-header-name (-J)            7.20.0
 --remote-name (-O)                   4.0

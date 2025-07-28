@@ -224,7 +224,7 @@ struct OperationConfig {
   long happy_eyeballs_timeout_ms; /* happy eyeballs timeout in milliseconds.
                                      0 is valid. default: CURL_HET_DEFAULT. */
   unsigned long timecond;
-  long followlocation;      /* follow http redirects mode */
+  long redirect;             /* follow http redirects mode */
   HttpReq httpreq;
   long proxyver;             /* set to CURLPROXY_HTTP* define */
   long ftp_ssl_ccc_mode;

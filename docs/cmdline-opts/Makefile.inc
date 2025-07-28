@@ -151,7 +151,6 @@ DPAGES = \
   limit-rate.md \
   list-only.md \
   local-port.md \
-  location-mode.md \
   location-trusted.md \
   location.md \
   login-options.md \
@@ -235,6 +234,7 @@ DPAGES = \
   range.md \
   rate.md \
   raw.md \
+  redirect.md \
   referer.md \
   remote-header-name.md \
   remote-name-all.md \

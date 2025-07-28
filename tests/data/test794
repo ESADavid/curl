@@ -1,7 +1,7 @@
 <testcase>
 <info>
 <keywords>
---location-mode
+--redirect
 --location
 </keywords>
 </info>
@@ -63,10 +63,10 @@ http
 </features>
 
 <name>
---location-mode keep with custom POST method, 302 => POST
+--redirect keep with custom POST method, 302 => POST
 </name>
 <command>
-http://%HOSTIP:%HTTPPORT/%TESTNUMBER -X IGLOO -d moo --location-mode keep
+http://%HOSTIP:%HTTPPORT/%TESTNUMBER -X IGLOO -d moo --redirect keep
 </command>
 </client>
 

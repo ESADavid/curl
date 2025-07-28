@@ -1,30 +1,33 @@
 ---
 c: Copyright (C) Daniel Stenberg, <daniel@haxx.se>, et al.
 SPDX-License-Identifier: curl
-Long: location-mode
+Long: redirect
 Arg: <mode>
 Help: Custom method redirect behavior
 Category: http
-Added: 8.14.0
+Added: 8.16.0
 Multi: single
 See-also:
   - request
   - location
 Example:
-  - -X POST -L --location-mode spec $URL
+  - -X POST --redirect spec $URL
 ---
 
-# `--location-mode`
+# `--redirect`
 
-Instructs curl how to do the custom request method set with --request when
-following redirects. The default mode is `keep`. curl only follows redirects if
-instructed to do so with --location.
+Instructs curl to follow redirects and how to do the custom request method set
+with --request when following redirects. Set the *mode* to use.
+
+Use this option *instead of* --location.
 
 ## keep
 
 The method string you set with --request is used for all requests even after
 redirects. It may cause unintended side-effects when curl does not change
 request method according to the HTTP 30x response codes - and similar.
+
+This mode is what --location enables.
 
 ## spec
 

@@ -202,7 +202,6 @@ static const struct LongShort aliases[]= {
   {"list-only",                  ARG_BOOL, 'l', C_LIST_ONLY},
   {"local-port",                 ARG_STRG, ' ', C_LOCAL_PORT},
   {"location",                   ARG_BOOL, 'L', C_LOCATION},
-  {"location-mode",              ARG_STRG, ' ', C_LOCATION_MODE},
   {"location-trusted",           ARG_BOOL, ' ', C_LOCATION_TRUSTED},
   {"login-options",              ARG_STRG, ' ', C_LOGIN_OPTIONS},
   {"mail-auth",                  ARG_STRG, ' ', C_MAIL_AUTH},
@@ -282,6 +281,7 @@ static const struct LongShort aliases[]= {
   {"range",                      ARG_STRG, 'r', C_RANGE},
   {"rate",                       ARG_STRG, ' ', C_RATE},
   {"raw",                        ARG_BOOL, ' ', C_RAW},
+  {"redirect",                   ARG_STRG, ' ', C_REDIRECT},
   {"referer",                    ARG_STRG, 'e', C_REFERER},
   {"remote-header-name",         ARG_BOOL, 'J', C_REMOTE_HEADER_NAME},
   {"remote-name",                ARG_BOOL, 'O', C_REMOTE_NAME},
@@ -1671,16 +1671,16 @@ static ParameterError parse_upload_flags(struct OperationConfig *config,
   return err;
 }
 
-static ParameterError parse_location_mode(struct GlobalConfig *global,
-                                          struct OperationConfig *config,
-                                          const char *nextarg)
+static ParameterError parse_redirect(struct GlobalConfig *global,
+                                     struct OperationConfig *config,
+                                     const char *nextarg)
 {
   if(!strcmp("keep", nextarg))
-    config->followlocation = CURLFOLLOW_ALL;
+    config->redirect = CURLFOLLOW_ALL;
   else if(!strcmp("spec", nextarg))
-    config->followlocation = CURLFOLLOW_OBEYCODE;
+    config->redirect = CURLFOLLOW_OBEYCODE;
   else if(!strcmp("init", nextarg))
-    config->followlocation = CURLFOLLOW_FIRSTONLY;
+    config->redirect = CURLFOLLOW_FIRSTONLY;
   else
     return PARAM_BAD_USE;
   (void)global;
@@ -2118,7 +2118,7 @@ static ParameterError opt_bool(struct OperationConfig *config,
     config->unrestricted_auth = toggle;
     FALLTHROUGH();
   case C_LOCATION: /* --location */
-    config->followlocation = toggle; /* Follow Location: HTTP headers */
+    config->redirect = toggle; /* Follow Location: HTTP headers */
     break;
   case C_MANUAL: /* --manual */
     if(toggle)   /* --no-manual shows no manual... */
@@ -2276,8 +2276,8 @@ static ParameterError opt_filestring(struct OperationConfig *config,
       config->sendpersecond = value;
     }
     break;
-  case C_LOCATION_MODE: /* --location-mode */
-    err = parse_location_mode(global, config, nextarg);
+  case C_REDIRECT: /* --redirect */
+    err = parse_redirect(global, config, nextarg);
     break;
   case C_RATE:
     err = set_rate(global, nextarg);
