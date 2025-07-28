@@ -182,8 +182,8 @@ DPAGES = \
   oauth2-bearer.md \
   output-dir.md \
   output.md \
-  parallel-max-host.md \
   parallel-immediate.md \
+  parallel-max-host.md \
   parallel-max.md \
   parallel.md \
   pass.md \
