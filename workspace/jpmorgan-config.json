@@ -1,0 +1,35 @@
+{
+  "organization": {
+    "id": "D3R56WRGSR3R",
+    "name": "JPMorgan Chase Validation Services",
+    "environment": "production"
+  },
+  "api": {
+    "base_url": "https://api.payments.jpmorgan.com",
+    "version": "v2",
+    "endpoints": {
+      "account_validation": "/tsapi/v2/validations/accounts",
+      "entity_validation": "/tsapi/v2/validations/entities",
+      "payroll_validation": "/tsapi/v2/validations/accounts"
+    },
+    "authentication": {
+      "type": "header",
+      "headers": {
+        "x-client-id": "required",
+        "x-program-id": "required",
+        "x-program-id-type": "optional",
+        "x-organization-id": "D3R56WRGSR3R"
+      }
+    }
+  },
+  "environments": {
+    "sandbox": {
+      "base_url": "https://api-sandbox.payments.jpmorgan.com",
+      "description": "Sandbox environment for testing"
+    },
+    "production": {
+      "base_url": "https://api.payments.jpmorgan.com",
+      "description": "Production environment"
+    }
+  }
+}
