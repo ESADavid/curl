@@ -1,1 +1,23 @@
-{}
+{
+  "sonarlint.pathToNodeExecutable": "C:\\Program Files\\nodejs\\node.exe",
+  "sonarlint.ls.javaHome": "",
+  "sonarlint.connectedMode.connections.sonarqube": [],
+  "sonarlint.connectedMode.connections.sonarcloud": [],
+  "sonarlint.disableTelemetry": false,
+  "sonarlint.focusOnNewCode": false,
+  "sonarlint.output.showAnalyzerLogs": false,
+  "sonarlint.output.showVerboseLogs": false,
+  "sonarlint.rules": {},
+  "sonarlint.testFilePattern": "**/test/**,**/tests/**,**/*test*,**/*spec*",
+  "files.associations": {
+    "*.c": "c",
+    "*.h": "c"
+  },
+  "C_Cpp.default.includePath": [
+    "${workspaceFolder}/include",
+    "${workspaceFolder}/include/curl"
+  ],
+  "C_Cpp.default.defines": [
+    "CURL_STATICLIB"
+  ]
+}
