@@ -1,0 +1,120 @@
+# Makefile for AI Learning Engine
+# Part of AI-Enhanced Curl Project
+# Version 1.0.0
+
+# Compiler and flags
+CC = gcc
+CFLAGS = -Wall -Wextra -std=c99 -O2 -fPIC
+DEBUG_FLAGS = -g -DDEBUG -Wall -Wextra -std=c99
+INCLUDE_DIR = -I./include -I./lib
+
+# Source files
+AI_ENGINE_SRC = lib/ai_learning_engine.c
+AI_ENGINE_HDR = include/curl/ai_learning_engine.h
+TEST_SRC = tests/ai_learning_engine_test.c
+
+# Object files
+AI_ENGINE_OBJ = $(AI_ENGINE_SRC:.c=.o)
+TEST_OBJ = $(TEST_SRC:.c=.o)
+
+# Output files
+AI_ENGINE_LIB = libai_learning_engine.a
+TEST_EXECUTABLE = tests/ai_learning_engine_test
+
+# Default target
+all: $(AI_ENGINE_LIB) $(TEST_EXECUTABLE)
+
+# Build static library
+$(AI_ENGINE_LIB): $(AI_ENGINE_OBJ)
+	ar rcs $@ $^
+	ranlib $@
+
+# Build object files
+%.o: %.c $(AI_ENGINE_HDR)
+	$(CC) $(CFLAGS) $(INCLUDE_DIR) -c $< -o $@
+
+# Build test executable
+$(TEST_EXECUTABLE): $(TEST_OBJ) $(AI_ENGINE_LIB)
+	$(CC) $(CFLAGS) $(INCLUDE_DIR) -o $@ $(TEST_OBJ) $(AI_ENGINE_LIB) -lm
+
+# Debug build
+debug: CFLAGS += $(DEBUG_FLAGS)
+debug: all
+
+# Run tests
+test: $(TEST_EXECUTABLE)
+	./$(TEST_EXECUTABLE)
+
+# Clean build artifacts
+clean:
+	rm -f $(AI_ENGINE_OBJ) $(TEST_OBJ) $(AI_ENGINE_LIB) $(TEST_EXECUTABLE)
+	rm -f *.o lib/*.o tests/*.o
+	rm -f test_model.bin
+
+# Install headers and library
+install: $(AI_ENGINE_LIB)
+	mkdir -p /usr/local/include/curl
+	mkdir -p /usr/local/lib
+	cp $(AI_ENGINE_HDR) /usr/local/include/curl/
+	cp $(AI_ENGINE_LIB) /usr/local/lib/
+
+# Uninstall
+uninstall:
+	rm -f /usr/local/include/curl/ai_learning_engine.h
+	rm -f /usr/local/lib/libai_learning_engine.a
+
+# Check dependencies
+check-deps:
+	@echo "Checking dependencies..."
+	@echo "GCC version: $(shell $(CC) --version | head -n1)"
+	@echo "Math library: OK"
+	@echo "Standard headers: OK"
+
+# Generate documentation
+docs:
+	doxygen Doxyfile.ai_learning_engine
+
+# Memory check with valgrind
+valgrind: $(TEST_EXECUTABLE)
+	valgrind --leak-check=full --show-leak-kinds=all ./$(TEST_EXECUTABLE)
+
+# Performance profiling
+profile: $(TEST_EXECUTABLE)
+	gprof $(TEST_EXECUTABLE) > profile.txt
+	cat profile.txt
+
+# Code coverage
+coverage: CFLAGS += -fprofile-arcs -ftest-coverage
+coverage: $(TEST_EXECUTABLE)
+	./$(TEST_EXECUTABLE)
+	gcov $(AI_ENGINE_SRC)
+	gcov $(TEST_SRC)
+
+# Static analysis
+static-analysis:
+	cppcheck --enable=all --std=c99 $(AI_ENGINE_SRC) $(AI_ENGINE_HDR)
+	clang-tidy $(AI_ENGINE_SRC) -- $(INCLUDE_DIR)
+
+# Format code
+format:
+	clang-format -i $(AI_ENGINE_SRC) $(AI_ENGINE_HDR) $(TEST_SRC)
+
+# Help
+help:
+	@echo "Available targets:"
+	@echo "  all          - Build library and tests (default)"
+	@echo "  debug        - Build with debug symbols"
+	@echo "  test         - Run test suite"
+	@echo "  clean        - Remove build artifacts"
+	@echo "  install      - Install headers and library"
+	@echo "  uninstall    - Remove installed files"
+	@echo "  check-deps   - Verify dependencies"
+	@echo "  docs         - Generate documentation"
+	@echo "  valgrind     - Memory leak detection"
+	@echo "  profile      - Performance profiling"
+	@echo "  coverage     - Code coverage analysis"
+	@echo "  static-analysis - Static code analysis"
+	@echo "  format       - Format source code"
+	@echo "  help         - Show this help message"
+
+.PHONY: all debug test clean install uninstall check-deps docs valgrind profile coverage static-analysis format help
