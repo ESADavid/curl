@@ -1,41 +1,69 @@
-# Copyright (C) Daniel Stenberg, <daniel@haxx.se>, et al.
-#
-# SPDX-License-Identifier: curl
+# Perfect Validation System Dockerfile
+# Copyright (C) 2024, Perfect Validation Systems
 
-# Self-contained build environment to match the release environment.
-#
-# Build and set the timestamp for the date corresponding to the release
-#
-#   docker build --build-arg SOURCE_DATE_EPOCH=1711526400 --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t curl/curl .
-#
-# Then run commands from within the build environment, for example
-#
-#   docker run --rm -it -u $(id -u):$(id -g) -v $(pwd):/usr/src -w /usr/src curl/curl autoreconf -fi
-#   docker run --rm -it -u $(id -u):$(id -g) -v $(pwd):/usr/src -w /usr/src curl/curl ./configure --without-ssl --without-libpsl
-#   docker run --rm -it -u $(id -u):$(id -g) -v $(pwd):/usr/src -w /usr/src curl/curl make
-#   docker run --rm -it -u $(id -u):$(id -g) -v $(pwd):/usr/src -w /usr/src curl/curl ./scripts/maketgz 8.7.1
-#
-# or get into a shell in the build environment, for example
-#
-#   docker run --rm -it -u $(id -u):$(id -g) -v $(pwd):/usr/src -w /usr/src curl/curl bash
-#   $ autoreconf -fi
-#   $ ./configure --without-ssl --without-libpsl
-#   $ make
-#   $ ./scripts/maketgz 8.7.1
+FROM ubuntu:22.04
 
-# To update, get the latest digest e.g. from https://hub.docker.com/_/debian/tags
-FROM debian:bookworm-slim@sha256:2424c1850714a4d94666ec928e24d86de958646737b1d113f5b2207be44d37d8
+# Set environment variables
+ENV DEBIAN_FRONTEND=noninteractive
+ENV VALIDATION_SYSTEM_CONFIG=/etc/validation-system/validation-system.conf
 
-RUN apt-get update -qq && apt-get install -qq -y --no-install-recommends \
-    build-essential make autoconf automake libtool git perl zip zlib1g-dev gawk && \
-    rm -rf /var/lib/apt/lists/*
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    pkg-config \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    libjson-c-dev \
+    libhiredis-dev \
+    libpq-dev \
+    redis-tools \
+    postgresql-client \
+    curl \
+    wget \
+    vim \
+    htop \
+    supervisor \
+    && rm -rf /var/lib/apt/lists/*
 
-ARG UID=1000 GID=1000
+# Create application user
+RUN groupadd -r validation-system && useradd -r -g validation-system validation-system
 
-RUN groupadd --gid $UID dev && \
-    useradd --uid $UID --gid dev --shell /bin/bash --create-home dev
+# Create directories
+RUN mkdir -p /opt/validation-system /etc/validation-system /var/log/validation-system /var/lib/validation-system
 
-USER dev:dev
+# Copy source code
+COPY . /opt/validation-system/src/
+WORKDIR /opt/validation-system/src
 
-ARG SOURCE_DATE_EPOCH
-ENV SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH:-1}
+# Build the application
+RUN mkdir build && cd build && \
+    cmake .. \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX=/opt/validation-system \
+        -DENABLE_VALIDATION=ON \
+        -DENABLE_ENHANCED_VALIDATION=ON \
+        -DENABLE_PERFECT_VALIDATION=ON && \
+    make -j$(nproc) && \
+    make install
+
+# Copy configuration files
+COPY config/validation-system.conf /etc/validation-system/
+COPY config/supervisord.conf /etc/supervisor/conf.d/
+
+# Set permissions
+RUN chown -R validation-system:validation-system /opt/validation-system /etc/validation-system /var/log/validation-system /var/lib/validation-system
+
+# Create symlinks for binaries
+RUN ln -sf /opt/validation-system/bin/validation-daemon /usr/local/bin/validation-daemon
+RUN ln -sf /opt/validation-system/bin/validation-cli /usr/local/bin/validation-cli
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+# Expose ports
+EXPOSE 8080 8443
+
+# Start supervisor
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
