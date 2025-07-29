@@ -1,0 +1,51 @@
+{
+  "channel": "Validation Services Updates",
+  "webhooks": {
+    "deployment": {
+      "name": "Deployment Notifications",
+      "events": [
+        "deployment_start",
+        "deployment_success",
+        "deployment_failure"
+      ]
+    },
+    "alerts": {
+      "name": "System Alerts",
+      "events": [
+        "error_threshold",
+        "performance_degradation",
+        "system_down"
+      ]
+    },
+    "metrics": {
+      "name": "Daily Metrics",
+      "events": [
+        "daily_summary",
+        "weekly_report"
+      ]
+    }
+  },
+  "adaptive_cards": {
+    "deployment_notification": {
+      "type": "message",
+      "attachments": [
+        {
+          "contentType": "application/vnd.microsoft.card.adaptive",
+          "content": {
+            "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+            "type": "AdaptiveCard",
+            "version": "1.0",
+            "body": [
+              {
+                "type": "TextBlock",
+                "text": "Validation Services Deployment",
+                "size": "Large",
+                "weight": "Bolder"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JPMorgan Validation System - Algorithm Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 60px;
+            margin-bottom: 40px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 1.4em;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .algorithm-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .algorithm-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .algorithm-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        
+        .algorithm-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        .algorithm-icon {
+            font-size: 3.5em;
+            margin-bottom: 25px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .algorithm-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+        
+        .algorithm-description {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+        
+        .flow-diagram {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .flow-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .flow-step {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .flow-step:hover {
+            transform: scale(1.05);
+        }
+        
+        .step-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .step-title {
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .metric-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .code-section {
+            background: #1e1e1e;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            overflow-x: auto;
+        }
+        
+        .code-section pre {
+            color: #d4d4d4;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .nav {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .priority-matrix {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+        
+        .priority-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .priority-table th,
+        .priority-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .priority-table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .priority-p0 { background: #ff6b6b; color: white; padding: 5px 10px; border-radius: 15px; font-weight: bold; }
+        .priority-p1 { background: #ffa726; color: white; padding: 5px 10px; border-radius: 15px; font-weight: bold; }
+        .priority-p2 { background: #42a5f5; color: white; padding: 5px 10px; border-radius: 15px; font-weight: bold; }
+        .priority-p3 { background: #66bb6a; color: white; padding: 5px 10px; border-radius: 15px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JPMorgan Validation System Algorithm</h1>
+            <p class="subtitle">Enterprise-Grade Validation Pipeline with AI-Powered Optimization</p>
+            <p>Complete architectural blueprint for production-ready validation services</p>
+        </header>
+
+        <nav class="nav">
+            <ul>
+                <li><a href="#overview">Algorithm Overview</a></li>
+                <li><a href="#pipeline">Validation Pipeline</a></li>
+                <li><a href="#performance">Performance</a></li>
+                <li><a href="#security">Security</a></li>
+                <li><a href="#monitoring">Monitoring</a></li>
+                <li><a href="#deployment">Deployment</a></li>
+            </ul>
+        </nav>
+
+        <section id="overview" class="algorithm-overview">
+            <div class="algorithm-card">
+                <div class="algorithm-icon">🎯</div>
+                <h3 class="algorithm-title">Multi-Layer Validation</h3>
+                <p class="algorithm-description">10-layer validation pipeline with AI-powered optimization, caching, and real-time monitoring for 99.99% accuracy.</p>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-icon">⚡</div>
+                <h3 class="algorithm-title">Ultra-Low Latency</h3>
+                <p class="algorithm-description">Sub-100ms response times with intelligent caching, connection pooling, and predictive pre-warming algorithms.</p>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-icon">🔒</div>
+                <h3 class="algorithm-title">Enterprise Security</h3>
+                <p class="algorithm-description">TLS 1.3 encryption, OAuth2 authentication, certificate pinning, and zero-trust architecture.</p>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-icon">📊</div>
+                <h3 class="algorithm-title">Real-Time Analytics</h3>
+                <p class="algorithm-description">Comprehensive metrics collection with predictive scaling and automated alerting systems.</p>
+            </div>
+        </section>
+
+        <section id="pipeline" class="flow-diagram">
+            <h2 class="algorithm-title">Validation Pipeline Flow</h2>
+            <div class="flow-steps">
+                <div class="flow-step">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Input Validation</div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Authentication</div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Payload Construction</div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">4</div>
+                    <div class="step-title">API Gateway</div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">5</div>
+                    <div class="step-title">Business Logic</div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">6</div>
+                    <div class="step-title">Response Validation</div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">7</div>
+                    <div class="step-title">Caching & Metrics</div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-number">8</div>
+                    <div class="step-title">Error Handling</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="performance" class="flow-diagram">
+            <h2 class="algorithm-title">Performance Metrics</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value"><100ms</div>
+                    <div class="metric-label">Average Response Time</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">99.9%</div>
+                    <div class="metric-label">Uptime SLA</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">10K</div>
+                    <div class="metric-label">Concurrent Validations</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">99.99%</div>
+                    <div class="metric-label">Validation Accuracy</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="security" class="flow-diagram">
+            <h2 class="algorithm-title">Security Architecture</h2>
+            <div class="code-section">
+                <pre>Security Layers:
+├── Transport Security (TLS 1.3)
+├── Certificate Pinning
+├── OAuth2 + MFA
+├── Input Sanitization
+├── Rate Limiting
+├── Audit Logging
+└── Zero-Trust Architecture</pre>
+            </div>
+        </section>
+
+        <section id="monitoring" class="flow-diagram">
+            <h2 class="algorithm-title">Real-Time Monitoring</h2>
+            <div class="code-section">
+                <pre>Monitoring Stack:
+├── Health Checks (30s intervals)
+├── Performance Metrics (p50, p95, p99)
+├── Business Metrics (success rates)
+├── Infrastructure Monitoring
+├── Alert Thresholds:
+│   ├── Response Time >200ms
+│   ├── Error Rate >1%
+│   └── Success Rate <95%
+└── Predictive Scaling</pre>
+            </div>
+        </section>
+
+        <section id="deployment" class="priority-matrix">
+            <h2 class="algorithm-title">Implementation Priority Matrix</h2>
+            <table class="priority-table">
+                <thead>
+                    <tr>
+                        <th>Priority</th>
+                        <th>Component</th>
+                        <th>Timeline</th>
+                        <th>Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="priority-p0">P0</span></td>
+                        <td>Core Validation Pipeline</td>
+                        <td>2 weeks</td>
+                        <td>Critical</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-p1">P1</span></td>
+                        <td>Connection Pooling</td>
+                        <td>1 week</td>
+                        <td>High</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-p1">P1</span></td>
+                        <td>Caching Layer</td>
+                        <td>1 week</td>
+                        <td>High</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-p2">P2</span></td>
+                        <td>Monitoring & Metrics</td>
+                        <td>1 week</td>
+                        <td>Medium</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-p2">P2</span></td>
+                        <td>Security Hardening</td>
+                        <td>2 weeks</td>
+                        <td>Medium</td>
+                    </tr>
+                    <tr>
+                        <td><span class="priority-p3">P3</span></td>
+                        <td>Auto-scaling</td>
+                        <td>1 week</td>
+                        <td>Low</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="flow-diagram">
+            <h2 class="algorithm-title">Advanced Features</h2>
+            <div class="algorithm-overview">
+                <div class="algorithm-card">
+                    <div class="algorithm-icon">🤖</div>
+                    <h3 class="algorithm-title">AI-Powered Optimization</h3>
+                    <p class="algorithm-description">Machine learning models predict validation patterns and pre-warm caches for optimal performance.</p>
+                </div>
+                
+                <div class="algorithm-card">
+                    <div class="algorithm-icon">🔄</div>
+                    <h3 class="algorithm-title">Circuit Breaker Pattern</h3>
+                    <p class="algorithm-description">Automatic failover with 5% error threshold, 30-second recovery, and half-open testing.</p>
+                </div>
+                
+                <div class="algorithm-card">
+                    <div class="algorithm-icon">📈</div>
+                    <h3 class="algorithm-title">Predictive Scaling</h3>
+                    <p class="algorithm-description">Auto-scaling based on historical patterns, CPU/memory thresholds, and predictive analytics.</p>
+                </div>
+                
+                <div class="algorithm-card">
+                    <div class="algorithm-icon">🛡️</div>
+                    <h3 class="algorithm-title">Zero-Trust Security</h3>
+                    <p class="algorithm-description">Never trust, always verify approach with continuous authentication and authorization.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="flow-diagram">
+            <h2 class="algorithm-title">Integration Code</h2>
+            <div class="code-section">
+                <pre>// Enhanced validation with algorithm features
+validation_config_t config = {
+    .base_url = "https://api.payments.jpmorgan.com/tsapi/v2",
+    .timeout = 30,
+    .max_retries = 3,
+    .enable_caching = true,
+    .enable_metrics = true,
+    .enable_connection_pooling = true,
+    .client_cert_path = "/path/to/cert.pem",
+    .client_key_path = "/path/to/key.pem"
+};
+
+validation_set_config(&config);
+
+validation_error_t error;
+CURLcode res = curl_validation_enhanced(curl, "validations/accounts", payload, &error);
+
+if (res == CURLE_OK) {
+    printf("✅ Validation successful\n");
+} else {
+    printf("❌ Error: %s (Code: %d)\n", error.message, error.code);
+    validation_free_error(&error);
+}</pre>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

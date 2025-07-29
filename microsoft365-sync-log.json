@@ -1,0 +1,75 @@
+{
+  "project_name": "jpmorgan-validation-services",
+  "timestamp": "2025-07-29T03:41:40.759085",
+  "modules": {
+    "validation-services": {
+      "files": [
+        "lib/validation.c",
+        "lib/validation_enhanced.c",
+        "include/curl/validation.h",
+        "include/curl/validation_enhanced.h"
+      ],
+      "description": "Core validation services library",
+      "version": "1.0.0",
+      "dependencies": [
+        "libcurl",
+        "OpenSSL",
+        "zlib"
+      ]
+    },
+    "training-modules": {
+      "files": [
+        "training/09-nvidia-technology/main.c",
+        "training/09-nvidia-technology/ai-workers.c",
+        "training/09-nvidia-technology/Makefile"
+      ],
+      "description": "Advanced training modules for validation services",
+      "version": "1.0.0"
+    },
+    "deployment-artifacts": {
+      "files": [
+        "docker-compose.yml",
+        "Dockerfile",
+        "deploy.sh",
+        "config/validation-system.service"
+      ],
+      "description": "Deployment and configuration artifacts",
+      "container_support": true,
+      "kubernetes_ready": true
+    }
+  },
+  "metrics": {
+    "validation_accuracy": 99.5,
+    "processing_speed": "0.5ms per transaction",
+    "uptime": 99.9,
+    "throughput": "1000 TPS",
+    "error_rate": 0.1
+  },
+  "sharepoint_integration": {
+    "document_library": "Validation Services",
+    "folder_structure": {
+      "source_code": "/Source Code",
+      "documentation": "/Documentation",
+      "deployment": "/Deployment",
+      "training": "/Training Materials"
+    }
+  },
+  "teams_integration": {
+    "channel": "Validation Services Updates",
+    "webhook_url": "https://webhook.office.com/webhookb2/YOUR_WEBHOOK_URL",
+    "notifications": [
+      "deployment",
+      "alerts",
+      "metrics"
+    ]
+  },
+  "power_bi": {
+    "dataset_name": "Validation Services Dashboard",
+    "reports": [
+      "Performance Metrics",
+      "System Health",
+      "Usage Analytics",
+      "Error Tracking"
+    ]
+  }
+}

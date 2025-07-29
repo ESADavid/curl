@@ -1,0 +1,21 @@
+{
+  "metrics_endpoint": "/metrics/nvidia",
+  "alerts": [
+    {
+      "name": "gpu_utilization_high",
+      "condition": "gpu_utilization > 90",
+      "action": "scale_up"
+    },
+    {
+      "name": "processing_latency_high",
+      "condition": "processing_time_ms > 5.0",
+      "action": "optimize"
+    }
+  ],
+  "dashboard_widgets": [
+    "gpu_utilization_chart",
+    "processing_speed_graph",
+    "accuracy_trend",
+    "throughput_metrics"
+  ]
+}

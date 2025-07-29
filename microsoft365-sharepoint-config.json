@@ -1,0 +1,43 @@
+{
+  "site_url": "https://jpmorgan.sharepoint.com/sites/validation-services",
+  "document_library": "Validation Services",
+  "folder_structure": {
+    "source_code": {
+      "path": "/Source Code",
+      "permissions": [
+        "Read",
+        "Write"
+      ],
+      "sync_enabled": true
+    },
+    "documentation": {
+      "path": "/Documentation",
+      "permissions": [
+        "Read",
+        "Write"
+      ],
+      "sync_enabled": true
+    },
+    "deployment": {
+      "path": "/Deployment",
+      "permissions": [
+        "Read",
+        "Write"
+      ],
+      "sync_enabled": true
+    },
+    "training": {
+      "path": "/Training Materials",
+      "permissions": [
+        "Read",
+        "Write"
+      ],
+      "sync_enabled": true
+    }
+  },
+  "versioning": {
+    "enabled": true,
+    "major_versions": 50,
+    "minor_versions": 500
+  }
+}

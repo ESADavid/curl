@@ -1,0 +1,73 @@
+{
+  "dataset_name": "Validation Services Dashboard",
+  "tables": [
+    {
+      "name": "PerformanceMetrics",
+      "columns": [
+        {
+          "name": "Timestamp",
+          "type": "DateTime"
+        },
+        {
+          "name": "ValidationAccuracy",
+          "type": "Decimal"
+        },
+        {
+          "name": "ProcessingSpeed",
+          "type": "Decimal"
+        },
+        {
+          "name": "Throughput",
+          "type": "Int64"
+        },
+        {
+          "name": "ErrorRate",
+          "type": "Decimal"
+        }
+      ]
+    },
+    {
+      "name": "SystemHealth",
+      "columns": [
+        {
+          "name": "Timestamp",
+          "type": "DateTime"
+        },
+        {
+          "name": "Uptime",
+          "type": "Decimal"
+        },
+        {
+          "name": "MemoryUsage",
+          "type": "Decimal"
+        },
+        {
+          "name": "CPUUsage",
+          "type": "Decimal"
+        },
+        {
+          "name": "DiskUsage",
+          "type": "Decimal"
+        }
+      ]
+    }
+  ],
+  "reports": [
+    {
+      "name": "Performance Overview",
+      "visuals": [
+        "line_chart",
+        "gauge",
+        "kpi_card"
+      ]
+    },
+    {
+      "name": "System Health",
+      "visuals": [
+        "area_chart",
+        "donut_chart",
+        "card"
+      ]
+    }
+  ]
+}

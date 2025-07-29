@@ -1,0 +1,34 @@
+{
+  "tenant_id": "YOUR_MICROSOFT365_TENANT_ID",
+  "client_id": "YOUR_MICROSOFT365_CLIENT_ID",
+  "client_secret": "YOUR_MICROSOFT365_CLIENT_SECRET",
+  "sharepoint_site": "https://jpmorgan.sharepoint.com/sites/validation-services",
+  "project_name": "jpmorgan-validation-services",
+  "sync_interval": 300,
+  "modules": [
+    "validation-services",
+    "training-modules",
+    "deployment-artifacts"
+  ],
+  "teams_webhook": "https://webhook.office.com/webhookb2/YOUR_WEBHOOK_URL",
+  "power_bi_dataset": "Validation Services Dashboard",
+  "graph_api_endpoint": "https://graph.microsoft.com/v1.0",
+  "sharepoint_document_library": "Validation Services",
+  "teams_channel": "Validation Services Updates",
+  "power_bi_workspace": "JPMorgan Validation Services",
+  "adaptive_cards": {
+    "deployment_notification": true,
+    "system_alerts": true,
+    "daily_metrics": true
+  },
+  "versioning": {
+    "enabled": true,
+    "major_versions": 50,
+    "minor_versions": 500
+  },
+  "permissions": {
+    "read": ["All Company"],
+    "write": ["Validation Team", "DevOps Team"],
+    "admin": ["IT Admin"]
+  }
+}
