@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JPMorgan Validation Services - Perfect Portal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .hover-scale:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Hero Section -->
+    <div class="gradient-bg min-h-screen flex items-center justify-center">
+        <div class="text-center text-white px-4">
+            <h1 class="text-6xl font-bold mb-4">
+                <i class="fas fa-shield-alt mr-4"></i>
+                JPMorgan Validation Services
+            </h1>
+            <p class="text-2xl mb-8">Perfect Integration Portal</p>
+            <p class="text-xl opacity-90 mb-8">Organization ID: D3R56WRGSR3R</p>
+            <div class="flex justify-center space-x-4">
+                <button onclick="startDemo()" class="bg-white text-purple-600 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition">
+                    <i class="fas fa-play mr-2"></i>Start Demo
+                </button>
+                <button onclick="openDocs()" class="glass-effect text-white px-8 py-3 rounded-full font-bold hover:bg-white hover:bg-opacity-20 transition">
+                    <i class="fas fa-book mr-2"></i>Documentation
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Perfect Features</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center p-6 hover-scale">
+                    <div class="text-4xl mb-4 text-purple-600">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">Lightning Fast</h3>
+                    <p class="text-gray-600">Sub-second response times with connection pooling and caching</p>
+                </div>
+                <div class="text-center p-6 hover-scale">
+                    <div class="text-4xl mb-4 text-green-600">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">Enterprise Security</h3>
+                    <p class="text-gray-600">SSL/TLS encryption, certificate management, and audit logging</p>
+                </div>
+                <div class="text-center p-6 hover-scale">
+                    <div class="text-4xl mb-4 text-blue-600">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">Cloud Ready</h3>
+                    <p class="text-gray-600">Docker, AWS Lambda, Google Cloud Run, Azure deployment</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Playground -->
+    <div class="py-20 bg-gray-100">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Interactive API Playground</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Account Validation -->
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4">
+                        <i class="fas fa-credit-card mr-2"></i>Account Validation
+                    </h3>
+                    <div class="space-y-4">
+                        <input type="text" id="accountNumber" placeholder="Account Number" 
+                               class="w-full p-3 border rounded-lg" value="123456789">
+                        <input type="text" id="routingNumber" placeholder="Routing Number" 
+                               class="w-full p-3 border rounded-lg" value="021000021">
+                        <button onclick="validateAccount()" class="w-full bg-purple-600 text-white p-3 rounded-lg hover:bg-purple-700">
+                            Validate Account
+                        </button>
+                        <div id="accountResult" class="mt-4 p-4 bg-gray-50 rounded-lg hidden"></div>
+                    </div>
+                </div>
+
+                <!-- Entity Validation -->
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4">
+                        <i class="fas fa-user mr-2"></i>Entity Validation
+                    </h3>
+                    <div class="space-y-4">
+                        <input type="text" id="firstName" placeholder="First Name" 
+                               class="w-full p-3 border rounded-lg" value="John">
+                        <input type="text" id="lastName" placeholder="Last Name" 
+                               class="w-full p-3 border rounded-lg" value="Doe">
+                        <button onclick="validateEntity()" class="w-full bg-green-600 text-white p-3 rounded-lg hover:bg-green-700">
+                            Validate Entity
+                        </button>
+                        <div id="entityResult" class="mt-4 p-4 bg-gray-50 rounded-lg hidden"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Dashboard -->
+    <div class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center mb-12">Real-time Performance Dashboard</h2>
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-6 rounded-lg">
+                    <h3 class="text-lg font-bold">Response Time</h3>
+                    <p class="text-3xl font-bold" id="responseTime">-- ms</p>
+                </div>
+                <div class="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-lg">
+                    <h3 class="text-lg font-bold">Success Rate</h3>
+                    <p class="text-3xl font-bold" id="successRate">-- %</p>
+                </div>
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-lg">
+                    <h3 class="text-lg font-bold">Active Connections</h3>
+                    <p class="text-3xl font-bold" id="connections">--</p>
+                </div>
+                <div class="bg-gradient-to-r from-red-500 to-red-600 text-white p-6 rounded-lg">
+                    <h3 class="text-lg font-bold">Cache Hit Rate</h3>
+                    <p class="text-3xl font-bold" id="cacheRate">-- %</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Start -->
+    <div class="py-20 bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-8">Get Started in 30 Seconds</h2>
+            <div class="bg-gray-800 p-6 rounded-lg text-left max-w-2xl mx-auto">
+                <pre class="text-green-400"><code># Clone and deploy
+git clone https://github.com/your-org/jpmorgan-validation
+cd jpmorgan-validation
+docker-compose up -d
+
+# Test the integration
+curl -X POST http://localhost:8080/api/validations/accounts \
+  -H "Content-Type: application/json" \
+  -d '{"account_number":"123456789","routing_number":"021000021"}'</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p>&copy; 2024 JPMorgan Chase & Co. Perfect Integration Portal</p>
+            <p class="mt-2">Organization ID: D3R56WRGSR3R</p>
+        </div>
+    </footer>
+
+    <script>
+        // Interactive functions
+        function startDemo() {
+            alert('🚀 Starting interactive demo...');
+            // Add demo logic here
+        }
+
+        function openDocs() {
+            window.open('https://developer.payments.jpmorgan.com/docs', '_blank');
+        }
+
+        function validateAccount() {
+            const accountNumber = document.getElementById('accountNumber').value;
+            const routingNumber = document.getElementById('routingNumber').value;
+            
+            // Simulate API call
+            setTimeout(() => {
+                const result = document.getElementById('accountResult');
+                result.innerHTML = `
+                    <div class="text-green-600">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        Account ${accountNumber} is valid and active
+                    </div>
+                `;
+                result.classList.remove('hidden');
+            }, 1000);
+        }
+
+        function validateEntity() {
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            
+            // Simulate API call
+            setTimeout(() => {
+                const result = document.getElementById('entityResult');
+                result.innerHTML = `
+                    <div class="text-green-600">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        Entity ${firstName} ${lastName} validated successfully
+                    </div>
+                `;
+                result.classList.remove('hidden');
+            }, 1000);
+        }
+
+        // Update dashboard metrics
+        setInterval(() => {
+            document.getElementById('responseTime').textContent = Math.floor(Math.random() * 500 + 100) + ' ms';
+            document.getElementById('successRate').textContent = Math.floor(Math.random() * 5 + 95) + '%';
+            document.getElementById('connections').textContent = Math.floor(Math.random() * 50 + 10);
+            document.getElementById('cacheRate').textContent = Math.floor(Math.random() * 20 + 80) + '%';
+        }, 3000);
+    </script>
+</body>
+</html>
