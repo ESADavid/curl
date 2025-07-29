@@ -1,0 +1,25 @@
+# Add JPMorgan Validation Services support to CMakeLists.txt
+
+# Add validation source files
+set(VALIDATION_SOURCES
+    lib/validation.c
+    lib/validation_json.c
+    lib/validation_payroll.c
+)
+
+# Add validation headers
+set(VALIDATION_HEADERS
+    include/curl/validation.h
+    include/curl/validation_payroll.h
+)
+
+# Add to libcurl sources
+list(APPEND LIBCURL_SOURCES ${VALIDATION_SOURCES})
+list(APPEND LIBCURL_HEADERS ${VALIDATION_HEADERS})
+
+# Add validation feature option
+option(ENABLE_JPMORGAN_VALIDATION "Enable JPMorgan Chase Validation Services API support" ON)
+
+if(ENABLE_JPMORGAN_VALIDATION)
+    add_definitions(-DUSE_JPMORGAN_VALIDATION)
+endif()

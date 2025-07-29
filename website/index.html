@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JPMorgan Chase Validation Services API - Developer Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            text-align: center;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+        
+        .feature-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .feature-description {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        .code-block pre {
+            margin: 0;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .endpoint-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .endpoint-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .endpoint-url {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin-bottom: 20px;
+        }
+        
+        .response-codes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .response-code {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .code-number {
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .cta-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background: #5a6fd8;
+        }
+        
+        .nav {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .nav a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: background 0.3s ease;
+        }
+        
+        .nav a:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JPMorgan Chase Validation Services API</h1>
+            <p class="subtitle">Complete Integration with curl/libcurl</p>
+        </header>
+
+        <nav class="nav">
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#account-validation">Account Validation</a></li>
+                <li><a href="#entity-validation">Entity Validation</a></li>
+                <li><a href="#payroll-validation">Payroll Validation</a></li>
+                <li><a href="#api-reference">API Reference</a></li>
+                <li><a href="#examples">Examples</a></li>
+            </ul>
+        </nav>
+
+        <section id="overview" class="endpoint-section">
+            <h2 class="endpoint-title">Overview</h2>
+            <p>This is a comprehensive integration of the JPMorgan Chase Validation Services API into the curl project, providing full support for account validation, entity validation, and payroll processing.</p>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">🏦</div>
+                    <h3 class="feature-title">Account Validation</h3>
+                    <p class="feature-description">Validate bank accounts with financial institutions using ABA, SWIFT, and other clearing systems.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">👤</div>
+                    <h3 class="feature-title">Entity Validation</h3>
+                    <p class="feature-description">Validate individuals and organizations with comprehensive identity verification.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3 class="feature-title">Payroll Validation</h3>
+                    <p class="feature-description">Validate payroll accounts and transactions with employer information.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="account-validation" class="endpoint-section">
+            <h2 class="endpoint-title">Account Validation</h2>
+            <div class="endpoint-url">POST https://api-mock.payments.jpmorgan.com/tsapi/v2/validations/accounts</div>
+            
+            <div class="code-block">
+                <pre>curl --request POST \
+  --url https://api-mock.payments.jpmorgan.com/tsapi/v2/validations/accounts \
+  --header 'x-client-id: CLIENTID' \
+  --header 'x-program-id: VERIAUTH' \
+  --data '[{
+    "requestId": "123e4567-e89b-12d3-a456-426614174000",
+    "account": {
+      "accountNumber": "12345",
+      "financialInstitutionId": {
+        "clearingSystemId": {
+          "id": "122199983",
+          "idType": "ABA"
+        }
+      }
+    },
+    "entity": {
+      "individual": {
+        "firstName": "Jane",
+        "lastName": "Abbot",
+        "fullName": "Jane Abbot"
+      }
+    }
+  }]'</pre>
+            </div>
+        </section>
+
+        <section id="entity-validation" class="endpoint-section">
+            <h2 class="endpoint-title">Entity Validation</h2>
+            <div class="endpoint-url">POST https://api-mock.payments.jpmorgan.com/tsapi/v2/validations/entities</div>
+            
+            <div class="code-block">
+                <pre>curl --request POST \
+  --url https://api-mock.payments.jpmorgan.com/tsapi/v2/validations/entities \
+  --header 'x-client-id: CLIENTID' \
+  --header 'x-program-id: COMPANYINDIVIDUAL' \
+  --data '[{
+    "requestId": "123e4567-e89b-12d3-a456-426614174123",
+    "entity": {
+      "individual": {
+        "firstName": "JOHN",
+        "lastName": "SMITH",
+        "fullName": "MR JOHN KAY SMITH MARTINEZ JR",
+        "postalAddress": {
+          "addressLine": ["123 MAIN ST", "APT 1A"],
+          "townName": "TAMPA",
+          "countrySubDvsn": "FL",
+          "country": "US",
+          "postalCode": "33607"
+        }
+      }
+    }
+  }]'</pre>
+            </div>
+        </section>
+
+        <section id="payroll-validation" class="endpoint-section">
+            <h2 class="endpoint-title">Payroll Validation</h2>
+            <div class="endpoint-url">POST https://api-mock.payments.jpmorgan.com/tsapi/v2/validations/accounts</div>
+            
+            <div class="code-block">
+                <pre>curl --request POST \
+  --url https://api-mock.payments.jpmorgan.com/tsapi/v2/validations/accounts \
+  --header 'x-client-id: CLIENTID' \
+  --header 'x-program-id: VERIAUTH' \
+  --data '[{
+    "requestId": "123e4567-e89b-12d3-a456-426614174124",
+    "account": {
+      "accountNumber": "12345",
+      "financialInstitutionId": {
+        "clearingSystemId": {
+          "id": "122199983",
+          "idType": "ABA"
+        }
+      }
+    },
+    "entity": {
+      "individual": {
+        "firstName": "Jane",
+        "lastName": "Abbot",
+        "fullName": "Jane Abbot"
+      }
+    },
+    "transactions": [{
+      "context": "PAYROLL",
+      "amount": {
+        "amount": 2500.00,
+        "currency": "USD"
+      }
+    }]
+  }]'</pre>
+            </div>
+        </section>
+
+        <section id="api-reference" class="endpoint-section">
+            <h2 class="endpoint-title">Response Codes</h2>
+            <div class="response-codes">
+                <div class="response-code">
+                    <span class="code-number">1002</span>
+                    <span>Open Valid</span>
+                </div>
+                <div class="response-code">
+                    <span class="code-number">1101</span>
+                    <span>Pass</span>
+                </div>
+                <div class="response-code">
+                    <span class="code-number">1209</span>
+                    <span>No Information Found</span>
+                </div>
+                <div class="response-code">
+                    <span class="code-number">2101</span>
+                    <span>Business Pass</span>
+                </div>
+                <div class="response-code">
+                    <span class="code-number">4609</span>
+                    <span>Potential Hit</span>
+                </div>
+                <div class="response-code">
+                    <span class="code-number">5609</span>
+                    <span>Potential Hit</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="examples" class="endpoint-section">
+            <h2 class="endpoint-title">Integration Examples</h2>
+            <p>Complete integration examples are available in the documentation:</p>
+            <ul>
+                <li><a href="docs/libcurl/validation.md">Developer Documentation</a></li>
+                <li><a href="jpmorgan-solutions.md">Complete Solutions Guide</a></li>
+            </ul>
+        </section>
+
+        <section class="cta-section">
+            <h2>Ready to Get Started?</h2>
+            <p>The JPMorgan Chase Validation Services API is now fully integrated into curl/libcurl.</p>
+            <a href="docs/libcurl/validation.md" class="cta-button">View Documentation</a>
+        </section>
+    </div>
+</body>
+</html>
