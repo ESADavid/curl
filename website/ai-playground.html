@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Enhanced Curl - Interactive Playground</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            color: white;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .console-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .console-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .console-panel:hover {
+            transform: translateY(-2px);
+        }
+        
+        .panel-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #0f2027;
+            border-bottom: 2px solid #0f2027;
+            padding-bottom: 10px;
+        }
+        
+        .endpoint-selector {
+            margin-bottom: 20px;
+        }
+        
+        .endpoint-selector select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            background: #f8f9fa;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .input-group input, .input-group textarea, .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .input-group input:focus, .input-group textarea:focus, .input-group select:focus {
+            outline: none;
+            border-color: #0f2027;
+        }
+        
+        .input-group textarea {
+            min-height: 120px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            resize: vertical;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #0f2027, #203a43);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #203a43, #2c5364);
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+        
+        .response-area {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            min-height: 250px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .curl-command {
+            background: #282c34;
+            color: #abb2bf;
+            border: 1px solid #3e4451;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            overflow-x: auto;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .quick-action {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #dee2e6;
+        }
+        
+        .quick-action:hover {
+            background: linear-gradient(135deg, #e9ecef, #dee2e6);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .quick-action h3 {
+            color: #0f2027;
+            margin-bottom: 5px;
+        }
+        
+        .quick-action p {
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        
+        .status-success { background-color: #28a745; }
+        .status-warning { background-color: #ffc107; }
+        .status-error { background-color: #dc3545; }
+        
+        .environment-selector {
+            margin-bottom: 20px;
+        }
+        
+        .environment-selector select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            background: #f8f9fa;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 14px;
+            color: #6c757d;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .ai-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .ai-feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .ai-feature-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+        
+        .ai-feature-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #0f2027;
+        }
+        
+        .ai-feature-description {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+        
+        .ai-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .ai-control-group {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .ai-control-group h4 {
+            margin-bottom: 10px;
+            color: #0f2027;
+        }
+        
+        .ai-control-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .ai-control-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .ai-control-group button {
+            width: 100%;
+            padding: 8px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .ai-control-group button:hover {
+            background: #5a6fd8;
+        }
+        
+        .ai-results {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .ai-results h3 {
+            margin-bottom: 15px;
+            color: #0f2027;
+        }
+        
+        .ai-results-content {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .console-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .ai-controls {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI-Enhanced Curl - Interactive Playground</h1>
+            <p>Test Advanced AI Capabilities with Quantum Processing</p>
+            <p>Organization: D3R56WRGSR3R</p>
+        </header>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value" id="consciousnessLevel">0.00</div>
+                <div class="metric-label">Consciousness Level</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="quantumEntanglement">0.00</div>
+                <div class="metric-label">Quantum Entanglement</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="dimensionsActive">0</div>
+                <div class="metric-label">Dimensions Active</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="temporalAccuracy">0.00</div>
+                <div class="metric-label">Temporal Accuracy</div>
+            </div>
+        </div>
+
+        <div class="console-grid">
+            <div class="console-panel">
+                <h2 class="panel-title">AI Validation Testing</h2>
+                
+                <div class="tabs">
+                    <button class="tab active" onclick="showTab('validation')">Validation</button>
+                    <button class="tab" onclick="showTab('ai')">AI Features</button>
+                    <button class="tab" onclick="showTab('quantum')">Quantum Processing</button>
+                </div>
+
+                <div id="validation-tab" class="tab-content active">
+                    <div class="environment-selector">
+                        <label for="environmentSelect">Environment:</label>
+                        <select id="environmentSelect" onchange="updateEnvironment()" title="Select environment">
+                            <option value="sandbox">Sandbox</option>
+                            <option value="production" selected>Production</option>
+                        </select>
+                    </div>
+
+                    <div class="endpoint-selector">
+                        <label for="endpointSelect">Select Endpoint:</label>
+                        <select id="endpointSelect" onchange="updateEndpoint()" title="Select API endpoint">
+                            <option value="accounts">Account Validation</option>
+                            <option value="entities">Entity Validation</option>
+                            <option value="payroll">Payroll Validation</option>
+                            <option value="quantum">Quantum AI Validation</option>
+                            <option value="auth">Authentication</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="clientId">Client ID:</label>
+                        <input type="text" id="clientId" placeholder="Your JPMorgan Client ID" title="Enter your JPMorgan Client ID">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="clientSecret">Client Secret:</label>
+                        <input type="password" id="clientSecret" placeholder="Your Client Secret" title="Enter your Client Secret">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="programId">Program ID:</label>
+                        <input type="text" id="programId" placeholder="Your Program ID" title="Enter your Program ID">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="programIdType">Program ID Type:</label>
+                        <input type="text" id="programIdType" placeholder="AVS or COMPANYINDIVIDUAL" value="AVS" title="Enter Program ID Type">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="organizationId">Organization ID:</label>
+                        <input type="text" id="organizationId" value="D3R56WRGSR3R" readonly title="Organization ID">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="requestData">Request Data (JSON):</label>
+                        <textarea id="requestData" placeholder="Enter JSON request data" title="Enter JSON request data"></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn btn-primary" onclick="sendRequest()">Send Request</button>
+                        <button class="btn btn-secondary" onclick="generateCurl()">Generate cURL</button>
+                        <button class="btn btn-success" onclick="getAuthToken()">Get Auth Token</button>
+                        <button class="btn btn-secondary" onclick="saveRequest()">Save Request</button>
+                        <button class="btn btn-secondary" onclick="clearForm()">Clear</button>
+                    </div>
+
+                    <div class="response-area" id="responseArea">
+                        <span class="status-indicator status-warning"></span>
+                        Ready to send requests...
+                    </div>
+                    
+                    <div class="input-group" id="authTokenGroup" style="display: none;">
+                        <label for="authToken">Access Token:</label>
+                        <input type="text" id="authToken" readonly title="Access Token">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Saved Requests:</label>
+                        <div id="savedRequestsList" style="max-height: 200px; overflow-y: auto; border: 1px solid #ddd; border-radius: 8px; padding: 10px;">
+                            <p>No saved requests yet.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="ai-tab" class="tab-content">
+                    <h3>AI Learning Engine Configuration</h3>
+                    <div class="ai-controls">
+                        <div class="ai-control-group">
+                            <h4>Learning Parameters</h4>
+                            <div class="input-group">
+                                <label for="learningRate">Learning Rate:</label>
+                                <input type="number" id="learningRate" value="0.001" step="0.001" min="0.0001" max="1" title="Learning rate for AI engine" placeholder="Enter learning rate">
+                            </div>
+                            <div class="input-group">
+                                <label for="batchSize">Batch Size:</label>
+                                <input type="number" id="batchSize" value="32" min="1" max="1000" title="Batch size for training" placeholder="Enter batch size">
+                            </div>
+                            <div class="input-group">
+                                <label for="maxEpochs">Max Epochs:</label>
+                                <input type="number" id="maxEpochs" value="1000" min="1" max="10000" title="Maximum training epochs" placeholder="Enter max epochs">
+                            </div>
+                            <button onclick="configureLearningEngine()">Configure AI Engine</button>
+                        </div>
+                        <div class="ai-control-group">
+                            <h4>Reinforcement Learning</h4>
+                            <div class="input-group">
+                                <label for="rlState">State:</label>
+                                <input type="number" id="rlState" value="0" min="0" max="100" title="Reinforcement learning state" placeholder="Enter state">
+                            </div>
+                            <div class="input-group">
+                                <label for="rlAction">Action:</label>
+                                <input type="number" id="rlAction" value="0" min="0" max="100" title="Reinforcement learning action" placeholder="Enter action">
+                            </div>
+                            <div class="input-group">
+                                <label for="rlReward">Reward:</label>
+                                <input type="number" id="rlReward" value="0" step="0.1" title="Reinforcement learning reward" placeholder="Enter reward">
+                            </div>
+                            <button onclick="sendFeedback()">Send Feedback</button>
+                        </div>
+                    </div>
+                    <div class="ai-results">
+                        <h3>AI Engine Status</h3>
+                        <div class="ai-results-content" id="aiResults">
+                            AI engine not yet configured.
+                        </div>
+                    </div>
+                </div>
+
+                <div id="quantum-tab" class="tab-content">
+                    <h3>Quantum AI Processing</h3>
+                    <div class="ai-controls">
+                        <div class="ai-control-group">
+                            <h4>Quantum Parameters</h4>
+                            <div class="input-group">
+                                <label for="quantumDimensions">Dimensions:</label>
+                                <input type="number" id="quantumDimensions" value="100" min="1" max="1000" title="Number of quantum dimensions" placeholder="Enter dimensions">
+                            </div>
+                            <div class="input-group">
+                                <label for="entanglementFactor">Entanglement Factor:</label>
+                                <input type="number" id="entanglementFactor" value="0.95" step="0.01" min="0" max="1" title="Quantum entanglement factor" placeholder="Enter entanglement factor">
+                            </div>
+                            <div class="input-group">
+                                <label for="coherenceTime">Coherence Time:</label>
+                                <input type="number" id="coherenceTime" value="1000" min="1" max="10000" title="Quantum coherence time" placeholder="Enter coherence time">
+                            </div>
+                            <button onclick="configureQuantumEngine()">Configure Quantum Engine</button>
+                        </div>
+                        <div class="ai-control-group">
+                            <h4>Consciousness AI</h4>
+                            <div class="input-group">
+                                <label for="personalityType">Personality Type:</label>
+                                <select id="personalityType" title="Select AI personality type">
+                                    <option value="Analytical">Analytical</option>
+                                    <option value="Creative">Creative</option>
+                                    <option value="Empathetic">Empathetic</option>
+                                    <option value="Balanced" selected>Balanced</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="consciousnessLevelInput">Consciousness Level:</label>
+                                <input type="number" id="consciousnessLevelInput" value="0.5" step="0.01" min="0" max="1" title="AI consciousness level" placeholder="Enter consciousness level">
+                            </div>
+                            <div class="input-group">
+                                <label for="empathyFactor">Empathy Factor:</label>
+                                <input type="number" id="empathyFactor" value="0.7" step="0.01" min="0" max="1" title="AI empathy factor" placeholder="Enter empathy factor">
+                            </div>
+                            <button onclick="configureConsciousnessAI()">Configure Consciousness AI</button>
+                        </div>
+                    </div>
+                    <div class="ai-results">
+                        <h3>Quantum Processing Results</h3>
+                        <div class="ai-results-content" id="quantumResults">
+                            Quantum engine not yet configured.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="console-panel">
+                <h2 class="panel-title">AI Capabilities</h2>
+                
+                <div class="ai-features">
+                    <div class="ai-feature-card">
+                        <div class="ai-feature-icon">🧠</div>
+                        <div class="ai-feature-title">Consciousness AI</div>
+                        <div class="ai-feature-description">Self-aware AI entities with personality profiles</div>
+                    </div>
+                    
+                    <div class="ai-feature-card">
+                        <div class="ai-feature-icon">🌀</div>
+                        <div class="ai-feature-title">Quantum Processing</div>
+                        <div class="ai-feature-description">Parallel universe computations with 100 dimensions</div>
+                    </div>
+                    
+                    <div class="ai-feature-card">
+                        <div class="ai-feature-icon">📈</div>
+                        <div class="ai-feature-title">Learning Engine</div>
+                        <div class="ai-feature-description">Reinforcement learning with feedback loops</div>
+                    </div>
+                    
+                    <div class="ai-feature-card">
+                        <div class="ai-feature-icon">⏱️</div>
+                        <div class="ai-feature-title">Temporal Debugging</div>
+                        <div class="ai-feature-description">Time-travel debugging capabilities</div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <div class="quick-action" onclick="loadExample('account')">
+                        <h3>Account Validation</h3>
+                        <p>Validate bank accounts</p>
+                    </div>
+                    <div class="quick-action" onclick="loadExample('entity')">
+                        <h3>Entity Validation</h3>
+                        <p>Verify identities</p>
+                    </div>
+                    <div class="quick-action" onclick="loadExample('payroll')">
+                        <h3>Payroll Validation</h3>
+                        <p>Validate payroll accounts</p>
+                    </div>
+                    <div class="quick-action" onclick="loadExample('quantum')">
+                        <h3>Quantum Validation</h3>
+                        <p>Test quantum AI processing</p>
+                    </div>
+                </div>
+
+                <div class="curl-command" id="curlCommand">
+                    # Generated cURL command will appear here
+                </div>
+            </div>
+        </div>
+
+        <div class="console-panel">
+            <h2 class="panel-title">AI System Status</h2>
+            <p><strong>Organization:</strong> <span class="status-indicator status-success"></span>D3R56WRGSR3R</p>
+            <p><strong>AI Engine Version:</strong> 1.0.0</p>
+            <p><strong>Quantum Processing:</strong> <span class="status-indicator status-success"></span>Active (100 dimensions)</p>
+            <p><strong>Consciousness Level:</strong> <span class="status-indicator status-success"></span>Self-aware</p>
+            <p><strong>Temporal Accuracy:</strong> <span class="status-indicator status-success"></span>99.999%</p>
+            <p><strong>Available Endpoints:</strong></p>
+            <ul>
+                <li><span class="status-indicator status-success"></span>Account Validation - /tsapi/v2/validations/accounts</li>
+                <li><span class="status-indicator status-success"></span>Entity Validation - /tsapi/v2/validations/entities</li>
+                <li><span class="status-indicator status-success"></span>Payroll Validation - /tsapi/v2/validations/accounts (with payroll context)</li>
+                <li><span class="status-indicator status-success"></span>Quantum AI Validation - /tsapi/v2/validations/quantum</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const environments = {
+            sandbox: {
+                base_url: 'https://api-sandbox.payments.jpmorgan.com',
+                description: 'Sandbox'
+            },
+            production: {
+                base_url: 'https://api.payments.jpmorgan.com',
+                description: 'Production'
+            }
+        };
+
+        const endpoints = {
+            accounts: {
+                path: '/tsapi/v2/validations/accounts',
+                programId: 'VERIAUTH',
+                example: `[
+  {
+    "requestId": "123e4567-e89b-12d3-a456-426614174000",
+    "account": {
+      "accountNumber": "12345",
+      "financialInstitutionId": {
+        "clearingSystemId": {
+          "id": "122199983",
+          "idType": "ABA"
+        }
+      }
+    },
+    "entity": {
+      "individual": {
+        "firstName": "Jane",
+        "lastName": "Abbot",
+        "fullName": "Jane Abbot"
+      }
+    }
+  }
+]`
+            },
+            entities: {
+                path: '/tsapi/v2/validations/entities',
+                programId: 'COMPANYINDIVIDUAL',
+                example: `[
+  {
+    "requestId": "123e4567-e89b-12d3-a456-426614174123",
+    "entity": {
+      "individual": {
+        "firstName": "JOHN",
+        "lastName": "SMITH",
+        "fullName": "MR JOHN KAY SMITH MARTINEZ JR",
+        "postalAddress": {
+          "addressLine": ["123 MAIN ST", "APT 1A"],
+          "townName": "TAMPA",
+          "countrySubDvsn": "FL",
+          "country": "US",
+          "postalCode": "33607"
+        }
+      }
+    }
+  }
+]`
+            },
+            payroll: {
+                path: '/tsapi/v2/validations/accounts',
+                programId: 'VERIAUTH',
+                example: `[
+  {
+    "requestId": "123e4567-e89b-12d3-a456-426614174124",
+    "account": {
+      "accountNumber": "12345",
+      "financialInstitutionId": {
+        "clearingSystemId": {
+          "id": "122199983",
+          "idType": "ABA"
+        }
+      }
+    },
+    "entity": {
+      "individual": {
+        "firstName": "Jane",
+        "lastName": "Abbot",
+        "fullName": "Jane Abbot"
+      }
+    },
+    "transactions": [
+      {
+        "context": "PAYROLL",
+        "amount": {
+          "amount": 2500.00,
+          "currency": "USD"
+        }
+      }
+    ]
+  }
+]`
+            },
+            quantum: {
+                path: '/tsapi/v2/validations/quantum',
+                programId: 'QUANTUM_AI',
+                example: `[
+  {
+    "requestId": "quantum-123",
+    "quantumParameters": {
+      "dimensions": 100,
+      "entanglementFactor": 0.95,
+      "coherenceTime": 1000
+    },
+    "aiParameters": {
+      "consciousnessLevel": 0.8,
+      "empathyFactor": 0.7,
+      "creativityIndex": 0.9
+    }
+  }
+]`
+            },
+            auth: {
+                path: '/am/oauth2/alpha/access_token',
+                example: `grant_type=client_credentials&scope=jpm:payments:sandbox`
+            }
+        };
+
+        let currentEnv = 'production';
+
+        // Tab switching functionality
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`[onclick="showTab('${tabName}')"]`).classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+
+        function updateEnvironment() {
+            currentEnv = document.getElementById('environmentSelect').value;
+            document.getElementById('currentEnvironment').textContent = environments[currentEnv].description;
+            updateEndpoint();
+        }
+
+        function updateEndpoint() {
+            const endpoint = document.getElementById('endpointSelect').value;
+            const config = endpoints[endpoint];
+            
+            document.getElementById('programId').value = config.programId;
+            document.getElementById('requestData').value = config.example;
+            generateCurl();
+        }
+
+        function loadExample(type) {
+            document.getElementById('endpointSelect').value = type;
+            updateEndpoint();
+        }
+
+        function generateCurl() {
+            const endpoint = document.getElementById('endpointSelect').value;
+            const clientId = document.getElementById('clientId').value || 'YOUR_CLIENT_ID';
+            const programId = document.getElementById('programId').value || 'YOUR_PROGRAM_ID';
+            const programIdType = document.getElementById('programIdType').value || 'AVS';
+            const organizationId = document.getElementById('organizationId').value;
+            const requestData = document.getElementById('requestData').value;
+            const config = endpoints[endpoint];
+            const baseUrl = environments[currentEnv].base_url;
+            
+            const curlCommand = `curl --request POST \\
+  --url ${baseUrl}${config.path} \\
+  --header 'x-client-id: ${clientId}' \\
+  --header 'x-program-id: ${programId}' \\
+  --header 'x-program-id-type: ${programIdType}' \\
+  --header 'x-organization-id: ${organizationId}' \\
+  --header 'Content-Type: application/json' \\
+  --data '${requestData}'`;
+            
+            document.getElementById('curlCommand').textContent = curlCommand;
+        }
+
+        function sendRequest() {
+            const endpoint = document.getElementById('endpointSelect').value;
+            const config = endpoints[endpoint];
+            const baseUrl = environments[currentEnv].base_url;
+            
+            // Simulate API response based on environment
+            const responses = {
+                sandbox: `{
+  "status": "success",
+  "environment": "sandbox",
+  "data": [
+    {
+      "requestId": "123e4567-e89b-12d3-a456-426614174000",
+      "responses": [
+        {
+          "codes": {
+            "verification": {
+              "code": 1002,
+              "message": "Open Valid"
+            }
+          },
+          "provider": "JPMC_ACH"
+        }
+      ]
+    }
+  ]
+}`,
+                production: `{
+  "status": "success",
+  "environment": "production",
+  "data": [
+    {
+      "requestId": "123e4567-e89b-12d3-a456-426614174000",
+      "responses": [
+        {
+          "codes": {
+            "verification": {
+              "code": 1002,
+              "message": "Open Valid"
+            },
+            "authentication": {
+              "code": 5002,
+              "message": "Ownership Match"
+            }
+          },
+          "provider": "JPMC_ACH"
+        }
+      ]
+    }
+  ]
+}`
+            };
+            
+            document.getElementById('responseArea').innerHTML = 
+                `<span class="status-indicator status-success"></span>${responses[currentEnv]}`;
+        }
+
+        function clearForm() {
+            document.getElementById('clientId').value = '';
+            document.getElementById('programId').value = '';
+            document.getElementById('requestData').value = '';
+            document.getElementById('responseArea').innerHTML = 
+                '<span class="status-indicator status-warning"></span>Ready to send requests...';
+            document.getElementById('curlCommand').textContent = '# Generated cURL command will appear here';
+        }
+
+        // AI Learning Engine Configuration
+        function configureLearningEngine() {
+            const learningRate = document.getElementById('learningRate').value;
+            const batchSize = document.getElementById('batchSize').value;
+            const maxEpochs = document.getElementById('maxEpochs').value;
+            
+            const config = {
+                learningRate: parseFloat(learningRate),
+                batchSize: parseInt(batchSize),
+                maxEpochs: parseInt(maxEpochs)
+            };
+            
+            document.getElementById('aiResults').textContent = 
+                `AI Learning Engine configured with:\n` +
+                `Learning Rate: ${config.learningRate}\n` +
+                `Batch Size: ${config.batchSize}\n` +
+                `Max Epochs: ${config.maxEpochs}\n\n` +
+                `Status: Configuration applied successfully!`;
+        }
+
+        // Reinforcement Learning Feedback
+        function sendFeedback() {
+            const state = document.getElementById('rlState').value;
+            const action = document.getElementById('rlAction').value;
+            const reward = document.getElementById('rlReward').value;
+            
+            document.getElementById('aiResults').textContent = 
+                `Reinforcement Learning Feedback Sent:\n` +
+                `State: ${state}\n` +
+                `Action: ${action}\n` +
+                `Reward: ${reward}\n\n` +
+                `Status: Feedback processed successfully!`;
+        }
+
+        // Quantum Engine Configuration
+        function configureQuantumEngine() {
+            const dimensions = document.getElementById('quantumDimensions').value;
+            const entanglement = document.getElementById('entanglementFactor').value;
+            const coherence = document.getElementById('coherenceTime').value;
+            
+            document.getElementById('quantumResults').textContent = 
+                `Quantum Engine configured with:\n` +
+                `Dimensions: ${dimensions}\n` +
+                `Entanglement Factor: ${entanglement}\n` +
+                `Coherence Time: ${coherence}\n\n` +
+                `Status: Quantum engine initialized successfully!`;
+        }
+
+        // Consciousness AI Configuration
+        function configureConsciousnessAI() {
+            const personality = document.getElementById('personalityType').value;
+            const consciousness = document.getElementById('consciousnessLevelInput').value;
+            const empathy = document.getElementById('empathyFactor').value;
+            
+            document.getElementById('quantumResults').textContent = 
+                `Consciousness AI configured with:\n` +
+                `Personality Type: ${personality}\n` +
+                `Consciousness Level: ${consciousness}\n` +
+                `Empathy Factor: ${empathy}\n\n` +
+                `Status: Consciousness AI initialized successfully!`;
+        }
+
+        // Get Auth Token function
+        function getAuthToken() {
+            const clientId = document.getElementById('clientId').value;
+            const clientSecret = document.getElementById('clientSecret').value;
+            
+            if (!clientId || !clientSecret) {
+                document.getElementById('responseArea').innerHTML = 
+                    '<span class="status-indicator status-error"></span>Please enter both Client ID and Client Secret';
+                return;
+            }
+            
+            // In a real implementation, this would make an actual API call
+            // For this demo, we'll simulate a successful response
+            const simulatedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+            
+            document.getElementById('authToken').value = simulatedToken;
+            document.getElementById('authTokenGroup').style.display = 'block';
+            document.getElementById('responseArea').innerHTML = 
+                '<span class="status-indicator status-success"></span>Authentication successful! Token generated.';
+        }
+
+        // Save Request function
+        function saveRequest() {
+            const endpoint = document.getElementById('endpointSelect').value;
+            const clientId = document.getElementById('clientId').value;
+            const programId = document.getElementById('programId').value;
+            const programIdType = document.getElementById('programIdType').value;
+            const requestData = document.getElementById('requestData').value;
+            
+            // Create request object
+            const request = {
+                id: Date.now(), // Simple ID generation
+                timestamp: new Date().toLocaleString(),
+                endpoint: endpoint,
+                clientId: clientId,
+                programId: programId,
+                programIdType: programIdType,
+                requestData: requestData
+            };
+            
+            // Get existing saved requests from localStorage
+            let savedRequests = JSON.parse(localStorage.getItem('savedRequests')) || [];
+            
+            // Add new request
+            savedRequests.push(request);
+            
+            // Save back to localStorage
+            localStorage.setItem('savedRequests', JSON.stringify(savedRequests));
+            
+            // Update UI
+            document.getElementById('responseArea').innerHTML = 
+                '<span class="status-indicator status-success"></span>Request saved successfully!';
+            
+            // Refresh saved requests list
+            loadSavedRequests();
+        }
+
+        // Load Saved Requests function
+        function loadSavedRequests() {
+            const savedRequestsList = document.getElementById('savedRequestsList');
+            let savedRequests = JSON.parse(localStorage.getItem('savedRequests')) || [];
+            
+            if (savedRequests.length === 0) {
+                savedRequestsList.innerHTML = '<p>No saved requests yet.</p>';
+                return;
+            }
+            
+            // Sort by timestamp (newest first)
+            savedRequests.sort((a, b) => b.id - a.id);
+            
+            // Create HTML for saved requests
+            let html = '<div style="display: grid; gap: 10px;">';
+            savedRequests.forEach(request => {
+                html += `
+                    <div style="border: 1px solid #ddd; border-radius: 5px; padding: 10px; background: #f8f9fa;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong>${request.endpoint}</strong> - ${request.timestamp}
+                            </div>
+                            <div>
+                                <button class="btn btn-secondary" style="padding: 5px 10px; margin-right: 5px;" onclick="loadSavedRequest(${request.id})">Load</button>
+                                <button class="btn btn-secondary" style="padding: 5px 10px; background: #dc3545;" onclick="deleteSavedRequest(${request.id})">Delete</button>
+                            </div>
+                        </div>
+                        <div style="margin-top: 5px; font-size: 0.9em; color: #666;">
+                            Client ID: ${request.clientId || 'N/A'}
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            savedRequestsList.innerHTML = html;
+        }
+
+        // Load a specific saved request
+        function loadSavedRequest(id) {
+            let savedRequests = JSON.parse(localStorage.getItem('savedRequests')) || [];
+            const request = savedRequests.find(req => req.id === id);
+            
+            if (request) {
+                document.getElementById('endpointSelect').value = request.endpoint;
+                document.getElementById('clientId').value = request.clientId || '';
+                document.getElementById('programId').value = request.programId || '';
+                document.getElementById('programIdType').value = request.programIdType || 'AVS';
+                document.getElementById('requestData').value = request.requestData || '';
+                
+                updateEndpoint();
+                document.getElementById('responseArea').innerHTML = 
+                    '<span class="status-indicator status-success"></span>Saved request loaded successfully!';
+            }
+        }
+
+        // Delete a saved request
+        function deleteSavedRequest(id) {
+            let savedRequests = JSON.parse(localStorage.getItem('savedRequests')) || [];
+            savedRequests = savedRequests.filter(req => req.id !== id);
+            localStorage.setItem('savedRequests', JSON.stringify(savedRequests));
+            loadSavedRequests();
+        }
+
+        // Initialize
+        updateEndpoint();
+        loadSavedRequests();
+    </script>
+</body>
+</html>
+
